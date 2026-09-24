@@ -1,0 +1,12 @@
+node_modules/
+**/node_modules/
+.svelte-kit/
+**/.svelte-kit/
+build/
+**/build/
+.env
+.env.local
+.env.*.local
+!.env.example
+.DS_Store
+Thumbs.db

@@ -1,0 +1,130 @@
+/* Sistema visual — neutro e sóbrio, sem glass/glow */
+:root {
+  --bg: #0d0e11;
+  --backdrop: #0a0b0d;
+  --panel: #15171b;
+  --panel-strong: #1a1c21;
+  --card: #15171b;
+  --card-hover: #1b1d22;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.16);
+  --border-soft: rgba(255, 255, 255, 0.05);
+  --text: rgba(232, 233, 236, 0.95);
+  --muted: rgba(154, 157, 165, 0.82);
+  --faint: rgba(154, 157, 165, 0.46);
+
+  --accent: rgba(203, 209, 224, 0.92);
+  --accent-solid: #7c8ba6;
+  --accent-soft: rgba(124, 139, 166, 0.16);
+  --accent-panel: rgba(69, 77, 97, 0.28);
+
+  --positive: #3fb87f;
+  --positive-soft: rgba(63, 184, 127, 0.15);
+  --negative: #e5646d;
+  --negative-soft: rgba(229, 100, 109, 0.15);
+  --planned: #c99a45;
+
+  --glow-ring: rgba(255, 255, 255, 0.04);
+  --glow-soft: rgba(0, 0, 0, 0);
+  --glow-depth: rgba(0, 0, 0, 0);
+  --glow-ring-h: rgba(255, 255, 255, 0.08);
+  --glow-soft-h: rgba(0, 0, 0, 0);
+  --glow-depth-h: rgba(0, 0, 0, 0);
+
+  --radius: 8px;
+  --card-blur: 0px;
+  --card-saturation: 100%;
+  --sidebar-width: 248px;
+  --motion-duration: 150ms;
+  --glow:
+    0 0 0 1px var(--glow-ring),
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+
+  --c-food: #e0b17a;
+  --c-grocery: #7fd18f;
+  --c-leisure: #b794f6;
+  --c-car: #67b8f2;
+  --c-clothing: #f0a3c4;
+  --c-services: #f0975e;
+  --c-taxes: #e19be8;
+  --c-bills: #8b9df0;
+  --c-subs: #5fd8cc;
+  --c-payments: #fb8fa0;
+  --c-others: #9aa4bd;
+
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  transition-duration: var(--motion-duration) !important;
+}
+html {
+  color-scheme: dark;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--backdrop);
+  color: var(--text);
+  font-family: var(--font);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  overscroll-behavior-y: contain;
+}
+button {
+  color: inherit;
+  font-family: inherit;
+}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
+}
+@media (max-width: 900px) {
+  body.sidebar-open {
+    height: 100dvh;
+    overflow: hidden;
+  }
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-track {
+  background: var(--backdrop);
+}
+@media (max-width: 900px) {
+  html, body { scrollbar-width: none; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+}
+:focus-visible {
+  outline: 2px solid var(--accent-solid);
+  outline-offset: 2px;
+}
+
+.g-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--glow);
+  backdrop-filter: blur(var(--card-blur)) saturate(var(--card-saturation));
+  -webkit-backdrop-filter: blur(var(--card-blur)) saturate(var(--card-saturation));
+  transition: background var(--motion-duration), border-color var(--motion-duration), box-shadow var(--motion-duration), border-radius var(--motion-duration);
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+}
+.app-shell.private .money {
+  -webkit-text-security: disc;
+  text-security: disc;
+  user-select: none;
+}

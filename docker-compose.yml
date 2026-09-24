@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: myfinance
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      POSTGRES_DB: myfinance
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myfinance"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # One-shot: creates tables, seeds accounts/categories/cards and the first
+  # user, then exits. Re-running is safe.
+  setup:
+    build:
+      context: ./app
+      target: setup
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://myfinance:${DB_PASSWORD}@db:5432/myfinance
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?set ADMIN_EMAIL in .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+    restart: "no"
+
+  app:
+    build:
+      context: ./app
+      target: runtime
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      setup:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: postgres://myfinance:${DB_PASSWORD}@db:5432/myfinance
+      PORT: 3000
+      # Must match the URL you type in the browser (scheme + host + port),
+      # otherwise SvelteKit rejects form POSTs (login) with a CSRF error.
+      ORIGIN: ${ORIGIN:-http://localhost:3000}
+      APP_NAME: MyFinance
+    ports:
+      - "${APP_PORT:-3000}:3000"
+
+volumes:
+  db-data:
